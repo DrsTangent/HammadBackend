@@ -1,15 +1,21 @@
 var express = require('express');
-const userController = require('../controllers/users.controllers');
-const { verifyUser, verifyUserRefreshToken } = require('../middlewares/authentication');
+const doctorsController = require('../controllers/doctors.controllers');
+const appointmentController = require('../controllers/appointments.controller');
+const { verifyDoctorRefreshToken, verifyDoctor } = require('../middlewares/authentication');
 const { profileFiles } = require('../middlewares/fileupload');
 var router = express.Router();
 
 /* Module 1: User Profiling */
-router.post('/signup', userController.signup);
-router.post('/signin', userController.signin);
-router.put('/me', verifyUser, profileFiles.fields([{'name': 'userPhoto'}]), userController.updateMyProfile);
-router.get('/me', verifyUser, userController.viewMyProfile);
-router.get('/signout', verifyUserRefreshToken, userController.signout)
-router.get('/refreshTokenCall',verifyUserRefreshToken, userController.refreshTokenCall);
+router.post('/signup', profileFiles.fields([{'name': 'doctorPhoto'}]), doctorsController.signup);
+router.post('/signin', doctorsController.signin);
+router.put('/me', verifyDoctor, profileFiles.fields([{'name': 'doctorPhoto'}]), doctorsController.updateMyProfile);
+router.get('/me', verifyDoctor, doctorsController.viewMyProfile);
+router.get('/signout', verifyDoctorRefreshToken, doctorsController.signout)
+router.get('/refreshTokenCall',verifyDoctorRefreshToken, doctorsController.refreshTokenCall);
+
+/* Appointments */
+router.get('/appointments', verifyDoctor, appointmentController.viewDoctorAppointments);
+router.delete('/appointments/:appointmentId', verifyDoctor, appointmentController.deleteDoctorAppointment);
+router.put('/weekly_availability', verifyDoctor, appointmentController.editWeeklyAvailability);
 
 module.exports = router;

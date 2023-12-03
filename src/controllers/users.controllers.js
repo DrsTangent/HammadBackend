@@ -1,5 +1,6 @@
 
 const cookiesOptions = require('../../config/cookiesConfig');
+const userModel = require('../models/user.model');
 const userServices = require('../services/users.services');
 const { dataResponse, messageResponse } = require('../utils/commonResponse');
 const multerFilesParser = require("../utils/multerFilesParser");
@@ -124,8 +125,8 @@ async function editUser(req, res, next){
 async function viewUsers(req, res, next){
     try{
         
-        let {total, users} = await userServices.viewUsers(mongooseQuery, limit, offset);
-        return res.send(dataResponse("success", {total, users}));
+        let users = await userModel.find({});
+        return res.send(dataResponse("success", {users}));
     }
     catch(error){
         return next(error);

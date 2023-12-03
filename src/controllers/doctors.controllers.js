@@ -1,5 +1,6 @@
 
 const cookiesOptions = require('../../config/cookiesConfig');
+const doctorModel = require('../models/doctor.model');
 const doctorServices = require('../services/doctors.services');
 const { dataResponse, messageResponse } = require('../utils/commonResponse');
 const multerFilesParser = require("../utils/multerFilesParser");
@@ -9,8 +10,12 @@ const multerFilesParser = require("../utils/multerFilesParser");
 
 async function signup(req, res, next){
     try{
-        const {email, password, name} = req.body;
-        let signupRes = await doctorServices.signup(name, email, password);
+        const {email, password, name, specialization} = req.body;
+
+        let doctorPhotoLink = await multerFilesParser.getSingleFileUrl("doctorPhoto", req.files)
+
+        let signupRes = await doctorServices.signup(name, email, password, specialization, doctorPhotoLink);
+        
         res.cookie("refreshToken", signupRes.refreshToken, cookiesOptions)
         return res.status(201).send(dataResponse("success", signupRes))
     }
@@ -124,8 +129,8 @@ async function editDoctor(req, res, next){
 async function viewDoctors(req, res, next){
     try{
         
-        let {total, doctors} = await doctorServices.viewDoctors(mongooseQuery, limit, offset);
-        return res.send(dataResponse("success", {total, doctors}));
+        let doctors = await doctorModel.find({});
+        return res.send(dataResponse("success", {doctors}));
     }
     catch(error){
         return next(error);

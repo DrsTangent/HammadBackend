@@ -8,6 +8,7 @@ const Session = new Schema({
   },
 })
 
+
 const Doctor = new Schema({
   name: {
     type: String,
@@ -17,7 +18,7 @@ const Doctor = new Schema({
     type: String,
     required: true,
   },
-  adminPhotoLink: {
+  doctorPhotoLink: {
     type: String,
     default: null
   },
@@ -28,6 +29,18 @@ const Doctor = new Schema({
   specialization: {
     type: String,
     required: true
+  },
+  weeklyAvailability: {
+    type: [{
+      day: {
+        type: String,
+        required: true,
+        enum: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+      },
+      startTime: { type: String, required: true },
+      endTime: { type: String, required: true }
+    }],
+    default: [],
   },
   refreshTokens: {
     type: [Session],

@@ -15,7 +15,7 @@ global.__basedir = __dirname;
 
 var adminsRouter = require('./src/routes/admins');
 var usersRouter = require('./src/routes/users');
-// var doctorsRouter = require('./src/routes/doctors');
+var doctorsRouter = require('./src/routes/doctors');
 
 //Starting News Job to Fetch related news from API if available.
 var app = express();
@@ -51,8 +51,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 app.use('/admins', adminsRouter);
-// app.use('/users', usersRouter);
-// app.use('/doctors', doctorsRouter);
+app.use('/users', usersRouter);
+app.use('/doctors', doctorsRouter);
 
 /*--------------Error Handling----------------*/
 

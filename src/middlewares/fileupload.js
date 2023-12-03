@@ -36,4 +36,34 @@ let profileFilesByAdmin = multer({
   })
 })
 
-module.exports = {profileFiles, profileFilesByAdmin};
+
+let blogFiles = multer({
+  storage: multer.diskStorage({
+    destination: (req, file, cb) => {
+      let dir = __basedir + `/public/uploads/blogs/`;
+      createDirIfNotExists(dir);
+      cb(null, dir);
+    },
+    filename: (req, file, cb) => {
+      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+      cb(null, file.fieldname + "-" + uniqueSuffix + "." + file.mimetype.split('/')[1]);
+    },
+  })
+})
+
+let adFiles = multer({
+  storage: multer.diskStorage({
+    destination: (req, file, cb) => {
+      let dir = __basedir + `/public/uploads/ads/`;
+      createDirIfNotExists(dir);
+      cb(null, dir);
+    },
+    filename: (req, file, cb) => {
+      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+      cb(null, file.fieldname + "-" + uniqueSuffix + "." + file.mimetype.split('/')[1]);
+    },
+  })
+})
+
+
+module.exports = {profileFiles, profileFilesByAdmin, blogFiles, adFiles};

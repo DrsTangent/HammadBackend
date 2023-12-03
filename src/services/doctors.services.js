@@ -26,7 +26,7 @@ Expected Output
 }
 */
 
-async function signup(name, email, password){
+async function signup(name, email, password, specialization, doctorPhotoLink){
 
     if(await isDoctorAvailableUsingEmail(email)){
         throw new createHttpError.Conflict("Doctor with current email already exists");
@@ -34,7 +34,7 @@ async function signup(name, email, password){
 
     let hashedPassword = generateHash(password);
 
-    let doctor = new Doctor({name, email, password: hashedPassword});
+    let doctor = new Doctor({name, email, password: hashedPassword, specialization, doctorPhotoLink});
 
     let payload = {
         id: doctor._id,
